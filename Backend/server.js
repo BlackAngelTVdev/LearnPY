@@ -127,6 +127,6 @@ app.get("/api/levels/:id", async (req, res) => {
   }
 });
 
-app.listen(Port, () => {
-  console.log(`✅ Backend lancé sur http://localhost:${Port}`);
+app.listen(Port, "0.0.0.0",() => {
+  console.log(`✅ Backend lancé sur http://0.0.0.0:${Port}`);
 });

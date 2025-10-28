@@ -17,5 +17,6 @@
     "node-fetch": "^3.3.2",
     "uuid": "^11.1.0"
   },
+  "devDependencies": {},
   "description": ""
 }
