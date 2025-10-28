@@ -3,6 +3,7 @@ import { ref, onMounted, nextTick, computed, onUnmounted } from "vue";
 
 /* ---------------------------- CONFIG GLOBALE ---------------------------- */
 const port = 8040;
+const url = "http://localhost:";
 
 /* --------------------------- ÉTATS PRINCIPAUX --------------------------- */
 // Niveau stocké
@@ -55,8 +56,6 @@ const pythonKeywordsHelp = [
   { word: "zip", desc: "Itère simultanément sur plusieurs séquences", example: "for a, b in zip([1,2],[3,4]): print(a,b)", url: "https://www.w3schools.com/python/ref_func_zip.asp" },
   { word: "reversed", desc: "Itère sur une séquence dans l’ordre inverse", example: "for i in reversed([1,2,3]): print(i)", url: "https://www.w3schools.com/python/ref_func_reversed.asp" },
   { word: "sorted", desc: "Itère sur une séquence et la trie", example: "for i in sorted([3,1,2]): print(i)", url: "https://www.w3schools.com/python/ref_func_sorted.asp" },
-
-  // mots et méthodes qu’on a utilisés mais pas encore listés
   { word: "append", desc: "Ajoute un élément à la fin d'une liste", example: "my_list.append(5)", url: "https://www.w3schools.com/python/ref_list_append.asp" },
   { word: "upper", desc: "Met une chaîne en majuscule", example: "'abc'.upper()  # 'ABC'", url: "https://www.w3schools.com/python/ref_string_upper.asp" },
   { word: "items", desc: "Itère sur les couples clé/valeur d'un dictionnaire", example: "for k,v in my_dict.items(): print(k,v)", url: "https://www.w3schools.com/python/ref_dictionary_items.asp" },
@@ -113,7 +112,7 @@ const scrollToBottom = async () => {
 /* --------------------------- NIVEAUX / API --------------------------- */
 async function chargerEnonce(level) {
   try {
-    const res = await fetch(`http://localhost:${port}/api/levels/${level}`);
+    const res = await fetch(`${url}${port}/api/levels/${level}`);
     const data = await res.json();
 
     if (data.success) {
@@ -211,7 +210,7 @@ const runCode = async () => {
   await scrollToBottom();
 
   try {
-    const response = await fetch(`http://localhost:${port}/api/run`, {
+    const response = await fetch(`${url}${port}/api/run`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code: code.value }),
@@ -238,10 +237,7 @@ const getDifficulty = (n) => {
   return { label: "Expert", color: "#f44336" };                 // Rouge
 };
 
-
 /* ----------------------------- RACCOURCIS ----------------------------- */
-
-
 let blockingSave = false;
 
 const onKey = (e) => {
@@ -262,7 +258,6 @@ const onKey = (e) => {
     }
     return;
   }
-
   /* ----------------------- BLOCK LE DEV TOOLS --------------------- */
   // F12
   if (e.key === "F12") {
@@ -296,12 +291,12 @@ const onKey = (e) => {
   }
 
   /* ----------------------- FLECHES --------------------- */
-  if ((e.ctrlKey || e.metaKey) && e.key === "ArrowLeft") {
+  if (e.key === "ArrowDown") {
     e.preventDefault();
     goToPreviousLevel();
     return;
   }
-  if ((e.ctrlKey || e.metaKey) && e.key === "ArrowRight") {
+  if ( e.key === "ArrowUp") {
     e.preventDefault();
     goToNextLevel();
     return;
@@ -312,8 +307,6 @@ const onContextMenu = (e) => {
   e.preventDefault(); // bloque clic droit
 
 };
-
-
 
 const theme = ref("default"); // par défaut notre thème existant
 
@@ -366,23 +359,29 @@ const applyTheme = () => {
 
 
 
-
-onMounted(async () => { // Niveau initial 
+let listenerAdded = false;
+onMounted(async () => {
   if (level > maxLevels.value) {
-    level = maxLevels.value; localStorage.setItem("learnPY.level", level);
+    level = maxLevels.value;
+    localStorage.setItem("learnPY.level", level);
   }
   await chargerEnonce(level);
   await nextTick();
   updateLineNumbers();
   syncScroll();
   applyTheme();
-  window.addEventListener("keydown", onKey, { capture: true });
-  window.addEventListener("contextmenu", onContextMenu);
+
+  if (!listenerAdded) {
+    window.addEventListener("keydown", onKey, { capture: true });
+    window.addEventListener("contextmenu", onContextMenu);
+    listenerAdded = true; // s’assure qu’on ne l’ajoute qu’une seule fois
+  }
 });
 
 onUnmounted(() => {
   window.removeEventListener("keydown", onKey, { capture: true });
   window.removeEventListener("contextmenu", onContextMenu);
+  listenerAdded = false; // reset si le composant se démonte
 });
 
 
