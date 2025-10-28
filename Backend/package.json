@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "Damien,Killan",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "env": "^0.0.2",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.5",
+    "node-fetch": "^3.3.2",
+    "uuid": "^11.1.0"
+  },
+  "description": ""
+}

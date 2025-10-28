@@ -1,0 +1,639 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+
+/* ==============================
+    Variables globales
+============================== */
+:root {
+  /*  Couleurs principales */
+  --color-bg: #2e2f31;
+  --color-surface: #3b3c3e;
+  --color-surface-alt: #424345;
+  --color-surface-light: #5e5e5e;
+  --color-border: #1f2430;
+  --color-border-strong: #2c2d2f;
+  --color-text: #f3f4f6;
+  --color-text-muted: #9aa3b2;
+  --color-title: #ffffff;
+
+  /*  Couleurs d’action */
+  --color-primary: #22c55e;
+  --color-primary-hover: #27e36c;
+  --color-danger: #ff6b6b;
+  --color-danger-hover: #ffaaaa;
+  --color-highlight: #00ff80;
+
+  /*  Couleurs syntax highlighting */
+  --color-keyword: #f59e0b;
+  --color-comment: #00660efb;
+  --color-variable: #c96ee0;
+  --color-string: #00ff80;
+  --color-paren: #3b82f6;
+  --color-accolade: #22c55e;
+  --color-crochet: #d41616;
+
+  /*  Layout et ombres */
+  --radius: 12px;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-inset: inset 0 0 0 1px #4b4c4f;
+
+  /*  Espacements */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+
+  /*  Typographie */
+  --font-main: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-size-xs: 13px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-xxl: 28px;
+
+  /*  Scrollbar */
+  --scrollbar-track: #1e1e1e;
+  --scrollbar-thumb: #ececec;
+
+  /*  Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+/* ==============================
+    Base
+============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  font-family: var(--font-main);
+  color: var(--color-text);
+}
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.theme-select {
+  appearance: none; /* Enlève le style par défaut du navigateur */
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  font-size: var(--font-size-xs);
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  min-width: 200px;
+}
+
+/* Flèche custom */
+.theme-select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D'10'%20height%3D'6'%20viewBox%3D'0%200%2010%206'%20xmlns%3D'http://www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M0%200l5%206%205-6H0z'%20fill%3D'%23f3f4f6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-sm) center;
+  background-size: 10px 6px;
+  padding-right: calc(var(--space-md) + 10px);
+}
+
+/* Option */
+.theme-select option {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-main);
+}
+/* ==============================
+    Topbar
+============================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 20px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: var(--font-size-xxl);
+  color: var(--color-title);
+}
+
+/* ==============================
+    Boutons
+============================== */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.run,
+.prev,
+.next {
+  background: var(--color-primary);
+  color: #0b0f0c;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.run:hover,
+.prev:hover,
+.next:hover {
+  transform: translateY(-1px);
+  background-color: var(--color-primary-hover);
+}
+
+.run:disabled,
+.prev:disabled,
+.next:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-weight: 500;
+  opacity: 0.8;
+  margin-left: var(--space-sm);
+  font-size: var(--font-size-xs);
+}
+
+/* ==============================
+    Enoncé
+============================== */
+.enoncer {
+  background: var(--color-surface);
+  text-align: center;
+  padding: var(--space-xl) var(--space-lg);
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+  color: var(--color-text);
+  font-weight: 500;
+  max-width: 900px;
+  margin: 0 auto var(--space-md);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-inset);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.enoncer p {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  color: var(--color-title);
+}
+
+/* ==============================
+    Layout
+============================== */
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  min-height: 0;
+  padding: var(--space-md);
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pane+.pane {
+  border-left: 2px solid var(--color-border-strong);
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.pane-title {
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+}
+
+/* ==============================
+    Éditeur
+============================== */
+.editor-wrapper {
+  display: flex;
+  height: 100%;
+  position: relative;
+  background: #0d1117;
+  border-radius: 0 0 var(--radius) 0;
+}
+
+.line-numbers {
+  background: #2a2b2f;
+  padding: 12px 10px;
+  color: var(--color-text-muted);
+  text-align: right;
+  user-select: none;
+  font-family: var(--font-mono);
+  line-height: 1.6;
+}
+
+textarea.editor {
+  flex: 1;
+  background: #1e1f23;
+  color: #b8f3c8;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+  resize: none;
+}
+
+/* ==============================
+    Terminal
+============================== */
+.terminal-pane {
+  background: #131517;
+}
+
+.terminal {
+  flex: 1;
+  padding: 18px;
+  overflow: auto;
+  background: #0d1117;
+  color: #a6f3a6;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  font-family: var(--font-mono);
+  border-radius: 0 0 0 var(--radius);
+}
+
+.terminal pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ==============================
+    Highlight syntax
+============================== */
+.keyword {
+  color: var(--color-keyword);
+  font-weight: 700;
+}
+
+.comments {
+  color: var(--color-comment);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.variable {
+  color: var(--color-variable);
+  font-weight: bold;
+}
+
+.guillemets {
+  color: var(--color-string);
+}
+
+.paren {
+  color: var(--color-paren);
+}
+
+.acolade {
+  color: var(--color-accolade);
+}
+
+.corchait {
+  color: var(--color-crochet);
+}
+
+/* ==============================
+    Overlay / Highlight layer
+============================== */
+.highlighted {
+  position: absolute;
+  top: 0;
+  left: 50px;
+  width: calc(100% - 50px);
+  height: 100%;
+  padding: 14px;
+  background: #0d1117;
+  color: #e5e7eb;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+textarea.editor.overlay {
+  margin-left: 35.5px;
+  margin-top: 15px;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--color-primary);
+  z-index: 2;
+  resize: none;
+}
+
+/* ==============================
+    Bouton poule
+============================== */
+.poule-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 10000px;
+  background: #ffffff69;
+  border: none;
+  cursor: pointer;
+  width: 70px;
+  height: 70px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.poule-btn img {
+  width: 70px;
+}
+
+.poule-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ==============================
+    Popup
+============================== */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn var(--transition-normal);
+}
+
+.popup-content {
+  background: #1e1e1e;
+  color: #fff;
+  padding: 25px 35px;
+  width: 900px;
+  max-height: 80%;
+  overflow-y: auto;
+  border-radius: var(--radius);
+  animation: slideUp var(--transition-normal);
+  font-family: var(--font-mono);
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.3em;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.popup-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popup-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background var(--transition-fast);
+  line-height: 1.5;
+}
+
+.popup-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.popup-item code {
+  background: var(--color-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+
+.close-btn {
+  background: var(--color-primary);
+  margin-top: 15px;
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform var(--transition-fast);
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ==============================
+    Scrollbars
+============================== */
+.popup-content::-webkit-scrollbar,
+.terminal::-webkit-scrollbar,
+.editor-wrapper::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.popup-content::-webkit-scrollbar-track,
+.terminal::-webkit-scrollbar-track,
+.editor-wrapper::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 8px;
+}
+
+.popup-content::-webkit-scrollbar-thumb,
+.terminal::-webkit-scrollbar-thumb,
+.editor-wrapper::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 8px;
+  border: 3px solid var(--scrollbar-track);
+}
+
+.popup-content,
+.terminal,
+.editor-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* ==============================
+    Liens et labels
+============================== */
+a {
+  text-decoration: none;
+  color: var(--color-highlight);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+label {
+  font-size: 30px;
+}
+
+/* ==============================
+    Custom select
+============================== */
+.custom-select {
+  position: relative;
+  width: 150px;
+  font-size: 16px;
+}
+
+.selected {
+  margin-right: 10px;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-primary);
+  display: flex;
+  justify-content: space-between;
+  color: rgb(0, 0, 0);
+}
+
+.options {
+  width: 200px;
+  position: absolute;
+  margin-top: 1rem;
+  top: 100%;
+  left: -30px;
+  right: 0;
+  background-color: var(--color-surface-light);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.options div {
+  padding: 5px 10px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.options div:hover {
+  background-color: var(--color-primary);
+}
+
+.fleche {
+  font-weight: 600;
+  text-align: end;
+}
+
+.clear-btn {
+  background: transparent;
+  border: none;
+  color: #ff6b6b;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0;
+  margin: 0;
+}
+
+.clear-btn:hover {
+  color: #ffaaaa;
+}
+.option-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.option-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.difficulty-tag {
+  font-size: 0.85em;
+  font-weight: 600;
+  opacity: 0.85;
+  transition: color 0.2s;
+}
+
+/* Hover spécifique sur la difficulté */
+.option-item:hover .difficulty-tag {
+  color: #ffeb3b; /* Jaune au hover */
+}
+
+/* ==============================
+    Animations
+============================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
