@@ -1,4 +1,4 @@
-# 🐍 LearnPY — Guide d’installation
+# 🐍 LearnPY
 
 ## 🚀 Installation complète
 
